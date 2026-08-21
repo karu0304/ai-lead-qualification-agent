@@ -1,4 +1,4 @@
-# AI Lead Qualification & Outreach Agent
+# 🤖 AI Lead Qualification & Outreach Agent
 
 An end-to-end AI-powered lead qualification and outreach workflow built with **n8n, Google Gemini, Google Sheets, and Gmail**.
 
@@ -11,6 +11,8 @@ The agent receives a new business lead, evaluates its qualification signals, ass
 ![AI Lead Qualification Workflow](workflow.png)
 
 The workflow connects lead intake, AI qualification, structured output, automated outreach, and email-status tracking into a single end-to-end automation pipeline.
+
+---
 
 ## 🚀 What This Project Does
 
@@ -71,86 +73,97 @@ Instead of manually reviewing every incoming lead, the system:
                 │ Update Status   │
                 │   → Sent        │
                 └─────────────────┘
+```
+
+---
 
 ## 🧠 AI Qualification Framework
 
-The AI Agent evaluates each lead across five dimensions:
+The AI Agent evaluates each lead across five dimensions.
 
-1. Decision-Making Authority
+### 1. Decision-Making Authority
 
 The agent considers the lead's job title and evaluates whether they appear to have purchasing influence.
 
 Examples of stronger authority signals:
 
-Founder
-Co-Founder
-CEO
-Owner
-Director
-Head of Department
-2. Business / Problem Fit
+- Founder
+- Co-Founder
+- CEO
+- Owner
+- Director
+- Head of Department
+
+### 2. Business / Problem Fit
 
 The agent evaluates whether the stated business problem is realistically suitable for AI automation.
 
 Examples include:
 
-Repetitive manual work
-Lead qualification
-Customer support
-Document processing
-Information extraction
-Workflow coordination
-Reporting
-Research
-Repetitive communication
-3. Problem Severity & Volume
+- Repetitive manual work
+- Lead qualification
+- Customer support
+- Document processing
+- Information extraction
+- Workflow coordination
+- Reporting
+- Research
+- Repetitive communication
+
+### 3. Problem Severity & Volume
 
 The agent considers:
 
-Task frequency
-Number of items processed
-Repetitive workload
-Operational complexity
-Whether the problem is recurring
+- Task frequency
+- Number of items processed
+- Repetitive workload
+- Operational complexity
+- Whether the problem is recurring
 
-The agent does not invent savings, revenue, ROI, or productivity improvements.
+The agent does **not** invent savings, revenue, ROI, or productivity improvements.
 
-4. Budget Signal
+### 4. Budget Signal
 
 A stated budget is treated as a signal of purchasing intent.
 
 The agent does not assume that the provided budget is sufficient for implementation and does not invent pricing.
 
-5. Timeline / Urgency
+### 5. Timeline / Urgency
 
 The implementation timeline is evaluated as a buying-intent signal.
 
 For example:
 
-Immediately
-This week
-Within 2 weeks
-Within 1 month
+- Immediately
+- This week
+- Within 2 weeks
+- Within 1 month
 
-indicate stronger urgency than an unspecified future timeline.
+These indicate stronger urgency than an unspecified future timeline.
 
-📊 Lead Scoring
+---
 
-The agent produces a score from 1–10.
+## 📊 Lead Scoring
 
-Score	Category	Meaning
-9–10	HOT	Excellent qualification signals
-8	HOT	Strong lead with minor uncertainty
-6–7	WARM	Potentially valuable but with missing/moderate signals
-4–5	WARM	Weak or uncertain qualification
-1–3	COLD	Poor fit or insufficient evidence
+The agent produces a score from **1–10**.
+
+| Score | Category | Meaning |
+|---:|---|---|
+| 9–10 | HOT | Excellent qualification signals |
+| 8 | HOT | Strong lead with minor uncertainty |
+| 6–7 | WARM | Potentially valuable but with missing/moderate signals |
+| 4–5 | WARM | Weak or uncertain qualification |
+| 1–3 | COLD | Poor fit or insufficient evidence |
 
 The agent is instructed not to assign a high score simply because someone is a founder, works in SaaS, has a large company, or provides a budget.
 
-📤 Structured AI Output
+---
 
-The AI Agent produces:
+## 📤 Structured AI Output
 
+The AI Agent produces structured output containing the key qualification and outreach fields:
+
+```json
 {
   "ai_score": 9,
   "lead_category": "HOT",
@@ -158,50 +171,68 @@ The AI Agent produces:
   "recommended_action": "...",
   "personalized_email": "..."
 }
+```
 
 This structured output is then used by the downstream automation.
 
-✉️ Automated Outreach
+---
+
+## ✉️ Automated Outreach
 
 After qualification, the workflow generates a personalized B2B email using:
 
-Lead name
-Company
-Stated business problem
-Potential AI automation approach
-Low-pressure call to action
+- Lead name
+- Company
+- Stated business problem
+- Potential AI automation approach
+- Low-pressure call to action
 
 The workflow then sends the generated email through Gmail.
 
 After successful delivery, the Google Sheet is updated:
 
+```text
 Email Status → Sent
-🛡️ Anti-Hallucination Rules
+```
+
+---
+
+## 🛡️ Anti-Hallucination Rules
 
 The agent is explicitly instructed not to invent:
 
-Company revenue
-Company growth
-Customer numbers
-Conversion rates
-ROI
-Cost savings
-Existing software
-Technology stack
-Meeting dates
-Meeting times
-Pricing
-Implementation guarantees
+- Company revenue
+- Company growth
+- Customer numbers
+- Conversion rates
+- ROI
+- Cost savings
+- Existing software
+- Technology stack
+- Meeting dates
+- Meeting times
+- Pricing
+- Implementation guarantees
 
 When information is missing, the agent is instructed to account for the uncertainty instead of assuming the best case.
 
-🧰 Tech Stack
-n8n — Workflow orchestration
-Google Gemini — LLM reasoning and generation
-Google Sheets — Lead database and workflow trigger
-Gmail — Automated personalized outreach
-Structured Output Parser — Reliable machine-readable AI output
-🔄 Workflow
+---
+
+## 🧰 Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| **n8n** | Workflow orchestration |
+| **Google Gemini** | LLM reasoning and generation |
+| **Google Sheets** | Lead database and workflow trigger |
+| **Gmail** | Automated personalized outreach |
+| **Structured Output Parser** | Reliable machine-readable AI output |
+
+---
+
+## 🔄 End-to-End Workflow
+
+```text
 New Lead
    ↓
 Google Sheets Trigger
@@ -219,58 +250,122 @@ Personalized Email
 Gmail
    ↓
 Email Status = Sent
-🧪 Example Use Case
+```
 
-A business submits a lead with information such as:
+---
 
-Name: Alex
-Company: Example SaaS
-Job Title: Founder
-Industry: SaaS
-Company Size: 25
-Problem: Manually qualifying 100 leads every week
-Budget: ₹50,000
-Timeline: Within 1 month
+## 🧪 Example Execution
 
-The agent evaluates the available evidence and produces a qualification score, category, reasoning, recommended next action, and personalized outreach.
+The workflow was tested with sample business leads and successfully completed the full automation pipeline.
 
-📁 Repository Structure
+### 📊 Execution Result
+
+![AI Lead Qualification Execution](execution.png)
+
+The processed lead is written back to Google Sheets with the AI qualification results, personalized outreach content, and final email status.
+
+### Example Input
+
+| Field | Example |
+|---|---|
+| Name | Alex |
+| Company | Example SaaS |
+| Job Title | Founder |
+| Industry | SaaS |
+| Company Size | 25 |
+| Problem | Manually qualifying 100 leads every week |
+| Budget | ₹50,000 |
+| Timeline | Within 1 month |
+
+### AI Qualification Result
+
+```json
+{
+  "ai_score": 9,
+  "lead_category": "HOT",
+  "recommended_action": "Initiate prompt follow-up to schedule a discovery call."
+}
+```
+
+The AI evaluated the lead using decision-making authority, business/problem fit, recurring workload, budget signal, and timeline urgency.
+
+### Automated Outreach
+
+The AI generated a personalized email based on the lead's company, role, business problem, and implementation timeline.
+
+The email was then sent automatically through Gmail.
+
+### Final Workflow State
+
+```text
+New Lead
+   ↓
+AI Qualification
+   ↓
+Score: 9/10
+   ↓
+Category: HOT
+   ↓
+Personalized Email Generated
+   ↓
+Gmail Email Sent
+   ↓
+Email Status → Sent
+```
+
+---
+
+## 📁 Repository Structure
+
+```text
 ai-lead-qualification-agent/
 │
 ├── README.md
-│
-└── ai-lead-qualification-agent.json
+├── .gitignore
+├── ai-lead-qualification-agent.json
+├── workflow.png
+└── execution.png
+```
 
 The JSON file contains the sanitized n8n workflow that can be imported into an n8n environment and connected to the user's own credentials and Google Sheet.
 
-⚙️ Setup
-1. Import the workflow
+---
+
+## ⚙️ Setup
+
+### 1. Import the Workflow
 
 Import:
 
+```text
 ai-lead-qualification-agent.json
+```
 
 into n8n.
 
-2. Configure credentials
+### 2. Configure Credentials
 
 Connect your own:
 
-Google Sheets credential
-Google Gemini credential
-Gmail credential
-3. Configure Google Sheets
+- Google Sheets credential
+- Google Gemini credential
+- Gmail credential
+
+### 3. Configure Google Sheets
 
 Replace:
 
+```text
 YOUR_GOOGLE_SHEET_ID
+```
 
 with your own Google Sheet.
 
-4. Configure the lead columns
+### 4. Configure the Lead Columns
 
 The workflow expects fields including:
 
+```text
 name
 email
 company
@@ -288,10 +383,13 @@ Personalized Email
 Lead ID
 Email Status
 created at
-5. Test
+```
+
+### 5. Test the Workflow
 
 Add a test lead to the configured Google Sheet and verify:
 
+```text
 Lead detected
     ↓
 AI qualification
@@ -303,7 +401,11 @@ Email generated
 Email sent
     ↓
 Status = Sent
-🔐 Security
+```
+
+---
+
+## 🔐 Security
 
 The workflow repository does not contain the actual Google, Gemini, or Gmail credentials.
 
@@ -311,6 +413,7 @@ Users should configure their own credentials when importing the workflow.
 
 Never commit:
 
+```text
 API keys
 OAuth secrets
 Passwords
@@ -318,18 +421,24 @@ Access tokens
 .env files
 Private credentials
 Real customer data
-🎯 Project Outcome
+```
+
+---
+
+## 🎯 Project Outcome
 
 This project demonstrates how an LLM can be integrated into a real business workflow rather than being used only as a standalone chatbot.
 
 The agent combines:
 
-Reasoning + Structured Output + Workflow Automation + External Actions + State Updates
+**Reasoning + Structured Output + Workflow Automation + External Actions + State Updates**
 
 to create an end-to-end AI-powered business process.
 
-👩‍💻 Author
+---
 
-Karunya
+## 👩‍💻 Author
+
+**Karunya**
 
 AI Automation Developer
