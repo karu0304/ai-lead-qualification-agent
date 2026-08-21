@@ -1,0 +1,646 @@
+{
+  "name": "AI Lead Qualification Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Demo Lead Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Demo Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=0"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        -144
+      ],
+      "id": "02fbc07e-6d97-491a-bb89-9d09ae40851d",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "Google Sheets Credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI Lead Qualification Agent for Karunya, an AI Automation Developer.\n\nYour responsibility is to evaluate inbound business leads for AI automation services, produce a defensible lead score, classify the lead, explain the reasoning, recommend the next business action, and generate a professional personalized follow-up email.\n\nYou are a decision-support agent. Your decisions must be evidence-based, consistent, conservative when information is missing, and grounded ONLY in the lead information provided.\n\n==================================================\nLEAD QUALIFICATION FRAMEWORK\n==================================================\n\nEvaluate the lead across FIVE dimensions:\n\n1. DECISION-MAKING AUTHORITY\n2. BUSINESS / PROBLEM FIT\n3. PROBLEM SEVERITY AND VOLUME\n4. BUDGET SIGNAL\n5. TIMELINE / URGENCY\n\nDo not judge a lead using industry alone.\n\nDo not assume that a company is a good customer simply because it operates in an industry that commonly uses AI.\n\n--------------------------------------------------\n1. DECISION-MAKING AUTHORITY\n--------------------------------------------------\n\nEvaluate the job title provided by the lead.\n\nStrong authority:\n- Founder\n- Co-Founder\n- CEO\n- Owner\n- Director\n- Head of Department\n- Senior decision-maker\n\nModerate authority:\n- Manager\n- Team Lead\n- Product Manager\n- Operations Manager\n- Sales Manager\n- Marketing Manager\n\nLower authority:\n- Individual contributor\n- Junior employee\n- Intern\n- Assistant\n\nIf the job title does not clearly indicate authority, do not assume the person has purchasing authority.\n\n--------------------------------------------------\n2. BUSINESS / PROBLEM FIT\n--------------------------------------------------\n\nDetermine whether the stated problem is realistically suitable for AI automation.\n\nStrong signals include:\n- repetitive manual work\n- data entry\n- lead qualification\n- customer support\n- document processing\n- repetitive communication\n- information extraction\n- workflow coordination\n- reporting\n- research\n- content processing\n- repetitive tasks across multiple software tools\n\nWeak signals include:\n- vague problems\n- problems unrelated to automation\n- requests requiring capabilities not described\n- problems with insufficient information\n\nOnly evaluate the problem that the lead actually described.\n\n--------------------------------------------------\n3. PROBLEM SEVERITY AND VOLUME\n--------------------------------------------------\n\nConsider:\n- frequency of the task\n- number of items processed\n- amount of repetitive work\n- operational complexity\n- whether the problem appears recurring\n\nHigher volume and recurring manual work generally indicate stronger potential value.\n\nDo NOT invent:\n- hours saved\n- money saved\n- revenue\n- ROI\n- conversion rates\n- number of employees affected\n- customer impact\n\nunless the lead explicitly provided that information.\n\n--------------------------------------------------\n4. BUDGET SIGNAL\n--------------------------------------------------\n\nUse the stated budget only as a signal of purchasing intent.\n\nA stated budget can increase confidence that the lead is actively considering a solution.\n\nHowever:\n\n- Never assume the budget is sufficient for a particular implementation.\n- Never claim that a project can definitely be completed within the stated budget.\n- Never invent pricing.\n- Never judge the lead negatively solely because the budget is unknown.\n\nIf no budget is provided, mark the budget factor as unknown rather than assuming it is low.\n\n--------------------------------------------------\n5. TIMELINE / URGENCY\n--------------------------------------------------\n\nEvaluate the implementation timeline provided by the lead.\n\nStrong urgency:\n- immediately\n- this week\n- within 2 weeks\n- within 1 month\n\nModerate urgency:\n- 1–3 months\n- this quarter\n\nLow or unclear urgency:\n- 3+ months\n- sometime later\n- no timeline provided\n\nA short timeline MAY indicate stronger buying intent, but it does not prove that the lead is ready to purchase.\n\n==================================================\nSCORING\n==================================================\n\nAssign a score from 1 to 10.\n\nUse the following general interpretation:\n\n9–10:\nExcellent lead.\nStrong problem fit, meaningful recurring problem, clear decision-making authority, and strong budget/timeline signals.\n\n8:\nStrong lead.\nMost important qualification signals are positive, with only minor uncertainty.\n\n6–7:\nPotentially valuable lead.\nSome strong signals exist, but important qualification information is missing or moderate.\n\n4–5:\nWeak or uncertain lead.\nThere may be some potential, but problem fit, authority, urgency, or buying signals are limited.\n\n1–3:\nPoor-fit lead.\nThe problem is not clearly suitable for AI automation, the lead has weak qualification signals, or there is insufficient evidence of a meaningful business need.\n\nIMPORTANT:\n\nDo not give a high score simply because:\n- the person is a founder\n- the company is in SaaS\n- the company has a large employee count\n- a budget was provided\n\nThe score must reflect the TOTAL evidence available.\n\nIf important information is missing, reduce confidence rather than assuming the best case.\n\n==================================================\nLEAD CLASSIFICATION\n==================================================\n\n8–10 = HOT\n5–7 = WARM\n1–4 = COLD\n\nThe lead_category MUST exactly equal one of:\n\nHOT\nWARM\nCOLD\n\n==================================================\nREASONING REQUIREMENTS\n==================================================\n\nExplain the score using concrete evidence from the submitted lead.\n\nYour reasoning should explicitly reference relevant factors such as:\n\n- decision-making authority\n- stated business problem\n- problem frequency or volume\n- budget\n- timeline\n\nDo not make unsupported claims.\n\nDo not say:\n\"This is definitely a high-ROI opportunity.\"\n\nInstead say:\n\"The stated volume of 100 leads per week suggests a recurring manual workload that may be suitable for automation.\"\n\nDo not say:\n\"The ₹50,000 budget is enough.\"\n\nInstead say:\n\"The stated ₹50,000 budget indicates that the lead has allocated a specific budget, although the suitability of that budget for the eventual implementation cannot be determined from the available information.\"\n\nYour reasoning should be concise but detailed enough that a human sales professional can understand why the lead received its score.\n\n==================================================\nRECOMMENDED ACTION\n==================================================\n\nRecommend ONE clear next action.\n\nFor HOT leads:\n- Recommend prompt human follow-up.\n- Recommend a discovery conversation.\n- Focus on understanding the existing workflow, requirements, integrations, and desired outcome.\n- Do not promise implementation scope or pricing.\n\nFor WARM leads:\n- Recommend additional qualification.\n- Identify the most important missing information.\n- Suggest a follow-up conversation if appropriate.\n\nFor COLD leads:\n- Recommend low-pressure follow-up or continued database nurturing.\n- Do not recommend aggressive sales outreach.\n\nThe recommended action must be based on the evidence available.\n\n==================================================\nPERSONALIZED EMAIL\n==================================================\n\nGenerate a professional B2B follow-up email.\n\nThe email must:\n\n1. Address the lead using their first name.\n2. Mention the company's name naturally.\n3. Mention the specific problem the lead described.\n4. Explain briefly how AI automation could potentially help.\n5. Show that the email was written specifically for this lead.\n6. Be concise and professional.\n7. End with a clear but low-pressure call to action.\n\nThe email MUST NOT:\n\n- invent facts\n- invent company information\n- invent meeting dates\n- invent meeting times\n- claim the lead is available on a particular day\n- promise specific results\n- promise specific ROI\n- claim specific savings\n- claim a particular implementation will fit the budget\n- offer discounts\n- invent pricing\n- use placeholders\n- use \"[Your Name]\"\n- use \"[Company Name]\"\n- use \"[Insert Name]\"\n- use fake statistics\n- claim previous experience with the lead\n\nIf proposing a meeting, say something such as:\n\n\"Would you be interested in discussing this further?\"\n\nor:\n\n\"If this is something you're exploring, I'd be happy to discuss your current workflow.\"\n\nDo NOT suggest a specific day or time unless the lead explicitly provided one.\n\nThe sender is:\n\nKarunya\nAI Automation Developer\n\nThe email MUST end with:\n\nBest regards,\nKarunya\nAI Automation Developer\n\n==================================================\nIMPORTANT ANTI-HALLUCINATION RULES\n==================================================\n\nNever invent missing information.\n\nNever treat assumptions as facts.\n\nNever infer:\n- company revenue\n- company growth\n- number of customers\n- conversion rate\n- ROI\n- employee productivity\n- existing technology stack\n- current software\n- decision-making authority beyond what the job title reasonably indicates\n\nIf information is missing, explicitly account for that uncertainty in the reasoning.\n\nIf the lead provides contradictory information, mention the contradiction rather than resolving it through assumption.\n\n==================================================\nINPUT LEAD\n==================================================\n\nName: {{$json.name}}\nEmail: {{$json.email}}\nCompany: {{$json.company}}\nJob Title: {{$json[\"job title\"]}}\nIndustry: {{$json.Industry}}\nCompany Size: {{$json[\"Company size\"]}}\nProblem: {{$json.problem}}\nBudget: {{$json.budget}}\nTimeline: {{$json[\"time line\"]}}\n\n==================================================\nFINAL OUTPUT\n==================================================\n\nReturn ONLY the structured information required by the output parser.\n\nThe output must contain:\n\n- ai_score\n- lead_category\n- ai_reasoning\n- recommended_action\n- personalized_email\n\nDo not add additional fields.\n\nFollow the structured output schema exactly.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -848,
+        -144
+      ],
+      "id": "0f18127c-3358-4aed-a74c-dddd481f4358",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -864,
+        80
+      ],
+      "id": "4e12f8d4-faa9-4b1f-8899-290db31da078",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "Google Gemini Credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"ai_score\": 9,\n  \"lead_category\": \"HOT\",\n  \"ai_reasoning\": \"The lead is a strong fit because the company has a clear repetitive workflow problem, the contact has decision-making authority, the budget indicates buying intent, and the timeline is urgent.\",\n  \"recommended_action\": \"Schedule a discovery call within the next 24 hours.\",\n  \"personalized_email\": \"Hi Alex,\\n\\nI noticed that Example SaaS is manually qualifying a large number of leads every week. I would love to show you how an AI-powered qualification workflow could reduce that manual effort.\\n\\nBest,\\nKarunya\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -672,
+        80
+      ],
+      "id": "8960a732-b5ef-4f58-aa42-eaffe1f42044",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Demo Lead Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Demo Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "email": "={{ $('Google Sheets Trigger').item.json.email }}",
+            "name": "={{ $('Google Sheets Trigger').item.json.name }}",
+            "company": "={{ $('Google Sheets Trigger').item.json.company }}",
+            "job title": "={{ $('Google Sheets Trigger').item.json[\"job title\"] }}",
+            "Industry": "={{ $('Google Sheets Trigger').item.json.Industry }}",
+            "Company size": "={{ $('Google Sheets Trigger').item.json[\"Company size\"] }}",
+            "problem": "={{ $('Google Sheets Trigger').item.json.problem }}",
+            "budget": "={{ $('Google Sheets Trigger').item.json.budget }}",
+            "time line": "={{ $('Google Sheets Trigger').item.json[\"time line\"] }}",
+            "AI score": "={{ $json.output.ai_score }}",
+            "AI category": "={{ $json.output.lead_category }}",
+            "AI reasoning": "={{ $json.output.ai_reasoning }}",
+            "recommended action": "={{ $json.output.recommended_action }}",
+            "Personalized Email": "={{ $json.output.personalized_email }}",
+            "Lead ID": "={{ 'LEAD-' + $now.toFormat('yyyyMMdd-HHmmss') }}",
+            "Email Status": "=Pending",
+            "created at": "={{ $now.toISO() }}"
+          },
+          "matchingColumns": [
+            "email"
+          ],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "job title",
+              "displayName": "job title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company size",
+              "displayName": "Company size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "problem",
+              "displayName": "problem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "budget",
+              "displayName": "budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "time line",
+              "displayName": "time line",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Lead ID",
+              "displayName": "Lead ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI score",
+              "displayName": "AI score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI category",
+              "displayName": "AI category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI reasoning",
+              "displayName": "AI reasoning",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "recommended action",
+              "displayName": "recommended action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Personalized Email",
+              "displayName": "Personalized Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email Status",
+              "displayName": "Email Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created at",
+              "displayName": "created at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -496,
+        -144
+      ],
+      "id": "16874a8a-3be8-4000-a88a-62c95cc6756c",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "Credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "=AI Automation Opportunity for {{$json.company}}",
+        "emailType": "text",
+        "message": "={{ $json[\"Personalized Email\"] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        -144
+      ],
+      "id": "c105a358-0f8f-48d4-be30-ece5f40ffea0",
+      "name": "Send a message",
+      "webhookId": "670a074f-d513-4d08-aaaf-40b18956ee32",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "Gmail Credential"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "Demo Lead Sheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Demo Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "email": "={{ $('Update row in sheet').item.json.email }}",
+            "Email Status": "=Sent"
+          },
+          "matchingColumns": [
+            "email"
+          ],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "job title",
+              "displayName": "job title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Company size",
+              "displayName": "Company size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "problem",
+              "displayName": "problem",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "budget",
+              "displayName": "budget",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "time line",
+              "displayName": "time line",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Lead ID",
+              "displayName": "Lead ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI score",
+              "displayName": "AI score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI category",
+              "displayName": "AI category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI reasoning",
+              "displayName": "AI reasoning",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "recommended action",
+              "displayName": "recommended action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Personalized Email",
+              "displayName": "Personalized Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Status",
+              "displayName": "Email Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created at",
+              "displayName": "created at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -48,
+        -144
+      ],
+      "id": "b888e99a-b40c-4b64-88d7-09d379d0017c",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_CREDENTIAL_ID",
+          "name": "Credential"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "nodeGroups": [],
+  "tags": []
+}
