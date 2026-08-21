@@ -66,7 +66,7 @@ Instead of manually reviewing every incoming lead, the system:
                 │   → Sent        │
                 └─────────────────┘
 
-🧠 AI Qualification Framework
+## 🧠 AI Qualification Framework
 
 The AI Agent evaluates each lead across five dimensions:
 
