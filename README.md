@@ -6,6 +6,12 @@ The agent receives a new business lead, evaluates its qualification signals, ass
 
 ---
 
+## 🔎 Workflow Overview
+
+![AI Lead Qualification Workflow](workflow.png)
+
+The workflow connects lead intake, AI qualification, structured output, automated outreach, and email-status tracking into a single end-to-end automation pipeline.
+
 ## 🚀 What This Project Does
 
 The workflow automates the early-stage lead qualification process.
